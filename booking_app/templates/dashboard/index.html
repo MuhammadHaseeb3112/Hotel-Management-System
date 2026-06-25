@@ -1,0 +1,32 @@
+{% extends "dashboard/dashabordBase.html" %}
+{% block dashboardContent %}
+
+<h2 class="page-title">Dashboard Overview</h2>
+
+<div class="row g-3">
+
+  <div class="col-md-4">
+    <div class="card shadow-sm p-3 text-center">
+      <h6>Total Hotels</h6>
+      <h2 class="text-success">{{ total_hotels }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm p-3 text-center">
+      <h6>Total Bookings</h6>
+      <h2 class="text-success">{{ total_bookings }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm p-3 text-center">
+      <h6>Pending</h6>
+      <h2 class="text-warning">{{ pending }}</h2>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+

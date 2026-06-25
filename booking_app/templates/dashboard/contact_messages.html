@@ -1,0 +1,48 @@
+{% extends 'dashboard/dashabordBase.html' %}
+
+{% block dashboardContent %}
+
+<h2 class="page-title mb-4">📩 Contact Messages</h2>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+
+    <table class="table table-bordered table-hover">
+
+      <thead class="table-success">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Subject</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for msg in messages %}
+        <tr>
+          <td>{{ msg.name }}</td>
+          <td>{{ msg.email }}</td>
+          <td>{{ msg.subject }}</td>
+          <td>{{ msg.message }}</td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+          <td colspan="4" class="text-center">
+            No messages found
+          </td>
+        </tr>
+
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  </div>
+</div>
+
+{% endblock %}

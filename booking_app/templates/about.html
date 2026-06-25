@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+  .about-hero {
+    padding: 90px 0 50px;
+    text-align: center;
+  }
+
+  .about-hero h1 {
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .about-hero p {
+    color: #6c757d;
+    font-size: 18px;
+  }
+
+  .about-card {
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .about-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+  }
+
+  .about-img {
+    border-radius: 14px;
+    max-height: 320px;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .feature-box {
+    padding: 30px 20px;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    background: #fff;
+  }
+
+  .feature-box:hover {
+    background: #f8f9fa;
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  }
+
+  .feature-icon {
+    font-size: 32px;
+    color: #198754;
+    margin-bottom: 12px;
+  }
+
+  .btn-success {
+    border-radius: 30px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .about-hero {
+      padding: 60px 0 30px;
+    }
+  }
+</style>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="about-hero">
+    <h1>About HotelBookingPK</h1>
+    <p>Your trusted partner for comfortable and affordable stays</p>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="card about-card shadow-sm border-0 p-4 p-md-5">
+    <div class="row align-items-center g-5">
+
+      <!-- TEXT -->
+      <div class="col-md-6">
+        <h3 class="fw-semibold mb-3">Who We Are</h3>
+        <p class="text-muted">
+          HotelBookingPK is a modern platform designed to simplify your hotel booking experience.
+          Whether you're planning a luxury vacation or a budget-friendly trip, we help you find the perfect stay quickly and easily.
+        </p>
+
+        <p class="text-muted">
+          Our mission is to provide seamless booking, transparent pricing, and trusted hotel listings across Pakistan.
+        </p>
+
+        <a href="{% url 'home' %}" class="btn btn-success mt-3 px-4">
+          Explore Hotels →
+        </a>
+      </div>
+
+      <!-- IMAGE -->
+      <div class="col-md-6">
+        <img src="{% static 'images/banner.jpg' %}" 
+             class="about-img shadow-sm">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="row text-center mt-5 g-4">
+
+    <div class="col-md-4">
+      <div class="feature-box h-100">
+        <i class="fas fa-hotel feature-icon"></i>
+        <h5 class="fw-semibold">Wide Selection</h5>
+        <p class="text-muted">Luxury to budget hotels across all major cities.</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-box h-100">
+        <i class="fas fa-shield-alt feature-icon"></i>
+        <h5 class="fw-semibold">Trusted Booking</h5>
+        <p class="text-muted">Safe, secure, and reliable booking experience.</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-box h-100">
+        <i class="fas fa-headset feature-icon"></i>
+        <h5 class="fw-semibold">24/7 Support</h5>
+        <p class="text-muted">Always available to assist you anytime.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

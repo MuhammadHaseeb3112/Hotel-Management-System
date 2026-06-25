@@ -1,0 +1,124 @@
+{% extends "dashboard/dashabordBase.html" %}
+{% block dashboardContent %}
+
+<div class="container" style="max-width:800px;">
+  <div class="card shadow-lg p-4 border-0" style="border-radius:18px;">
+
+
+<h3 class="mb-4 text-center text-success">➕ Add New Hotel</h3>
+
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <label class="form-label">Hotel Name</label>
+  <input class="form-control mb-3" name="name" required>
+
+  <label class="form-label">City</label>
+  <input class="form-control mb-3" name="city" required>
+
+  <label class="form-label">Price per Night</label>
+  <input class="form-control mb-3" name="price" required>
+
+  <label class="form-label">Number of Rooms</label>
+  <input class="form-control mb-3" name="rooms" required>
+
+  <label class="form-label">Address</label>
+  <textarea class="form-control mb-3" name="address" required></textarea>
+
+  <label class="form-label">Amenities</label>
+  <input class="form-control mb-3" name="amenities"
+         placeholder="WiFi, Pool, Parking">
+
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" name="default" checked>
+    <label class="form-check-label">Set as Default</label>
+  </div>
+
+  <!-- FILE INPUT -->
+  <label class="form-label">Upload Images</label>
+  <input type="file" id="image-input" multiple class="form-control mb-2">
+
+  <p id="file-count" class="text-muted"></p>
+
+  <!-- PREVIEW -->
+  <div id="preview-container" class="d-flex flex-wrap mb-3"></div>
+
+  <!-- Hidden real input -->
+  <input type="file" name="images" id="real-input" multiple hidden>
+
+  <button class="btn w-100 text-white"
+          style="background:linear-gradient(45deg,#16a34a,#22c55e);">
+    Save Hotel
+  </button>
+
+</form>
+
+
+  </div>
+</div>
+
+<script>
+let selectedFiles = [];
+
+// Handle selection
+document.getElementById("image-input").addEventListener("change", function(event) {
+  const files = Array.from(event.target.files);
+
+  selectedFiles = selectedFiles.concat(files);
+  renderPreview();
+});
+
+// Render preview
+function renderPreview() {
+  const container = document.getElementById("preview-container");
+  const countText = document.getElementById("file-count");
+
+  container.innerHTML = "";
+  countText.innerText = selectedFiles.length + " file(s) selected";
+
+  selectedFiles.forEach((file, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "relative";
+    wrapper.style.margin = "5px";
+
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.style.width = "100px";
+    img.style.height = "100px";
+    img.style.objectFit = "cover";
+    img.style.borderRadius = "8px";
+
+    // REMOVE BUTTON
+    const btn = document.createElement("button");
+    btn.innerText = "✖";
+    btn.type = "button";
+    btn.style.position = "absolute";
+    btn.style.top = "5px";
+    btn.style.right = "5px";
+    btn.style.background = "red";
+    btn.style.color = "white";
+    btn.style.border = "none";
+    btn.style.borderRadius = "50%";
+    btn.style.width = "22px";
+    btn.style.height = "22px";
+    btn.style.cursor = "pointer";
+
+    btn.onclick = () => {
+      selectedFiles.splice(index, 1);
+      renderPreview();
+    };
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(btn);
+    container.appendChild(wrapper);
+  });
+
+  // Sync files to hidden input
+  const dataTransfer = new DataTransfer();
+  selectedFiles.forEach(file => dataTransfer.items.add(file));
+
+  document.getElementById("real-input").files = dataTransfer.files;
+}
+</script>
+
+{% endblock %}

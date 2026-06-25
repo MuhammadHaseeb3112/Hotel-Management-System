@@ -1,0 +1,866 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %} 
+{% if request.resolver_match.url_name == "home" %}
+
+<div class="banner">
+  <div class="overlay"></div>
+
+  <div class="banner-content text-center">
+    <h1>Find Your Next Stay</h1>
+    <p>Luxury, comfort, and affordability—all in one place!</p>
+
+    <!-- Location Dropdown -->
+    <div class="dropdown mt-3">
+      <button
+        class="btn btn-success dropdown-toggle px-4"
+        type="button"
+        data-bs-toggle="dropdown"
+      >
+        Select Location
+      </button>
+
+      <ul class="dropdown-menu custom-dropdown">
+        <li>
+          <a class="dropdown-item location-item" data-city="all" href="#">
+            Show All
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="lahore" href="#">
+            Lahore
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="dropdown-item location-item"
+            data-city="bahawalpur"
+            href="#"
+          >
+            Bahawalpur
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="murree" href="#">
+            Murree
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="islamabad" href="#">
+            Islamabad
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="karachi" href="#">
+            Karachi
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="swat" href="#">
+            Swat
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="peshawar" href="#">
+            Peshawar
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="gilgit" href="#">
+            Gilgit Baltistan
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item location-item" data-city="quetta" href="#">
+            Quetta
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endif %} 
+{% if request.resolver_match.url_name == "home" %}
+
+<!-- Hotel Details Modal -->
+<div
+  class="modal fade"
+  id="hotelDetailsModal"
+  tabindex="-1"
+  aria-labelledby="hotelDetailsModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="hotelDetailsModalLabel">Hotel Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Hotel Information -->
+        <h2 id="hotel-name"></h2>
+        <p id="hotel-address"></p>
+        <p>
+          <strong>Price per Night:</strong> Rs<span id="hotel-price"></span>
+        </p>
+
+        <!-- Images Section -->
+
+        <div id="hotel-images" class="mb-3">
+          <!-- Images will be dynamically added here -->
+        </div>
+
+        <h2>Amenities</h2>
+        <ul id="hotel-amenities">
+          <!-- Amenities will be dynamically added here -->
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          id="book-now-button"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <img
+          id="gallery-image"
+          src=""
+          alt="Gallery Image"
+          style="max-width: 95%; max-height: 70vh; border-radius: 12px"
+        />
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button id="prev-image" class="btn btn-outline-success">
+          Previous
+        </button>
+        <button id="next-image" class="btn btn-outline-success">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1">
+  <!-- ✅ SCROLLABLE + BETTER POSITION -->
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content shadow-lg">
+      <!-- HEADER -->
+      <div class="modal-header">
+        <h5 class="modal-title">Book Your Stay</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+        <form id="booking-form">
+          <!-- 🔹 CUSTOMER DETAILS -->
+          <h6 class="mb-3 text-success">Customer Information</h6>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Full Name</label>
+              <input
+                type="text"
+                id="customer-name"
+                class="form-control"
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                id="customer-email"
+                class="form-control"
+                placeholder="Enter email"
+                required
+              />
+              <small class="text-danger d-none" id="email-error"
+                >Invalid email</small
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input
+              type="tel"
+              id="customer-phone"
+              class="form-control"
+              placeholder="03XX-XXXXXXX"
+              required
+            />
+            <small class="text-danger d-none" id="phone-error"
+              >Invalid phone</small
+            >
+          </div>
+
+          <hr />
+
+          <!-- 🔹 BOOKING DETAILS -->
+          <h6 class="mb-3 text-success">Booking Details</h6>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Check-in</label>
+              <input
+                type="date"
+                id="check-in-date"
+                class="form-control"
+                required
+              />
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Check-out</label>
+              <input
+                type="date"
+                id="check-out-date"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Number of Rooms</label>
+            <select id="number-of-rooms" class="form-select" required>
+              <option value="1">1 Room</option>
+              <option value="2">2 Rooms</option>
+              <option value="3">3 Rooms</option>
+              <option value="4">4 Rooms</option>
+              <option value="5">5 Rooms</option>
+            </select>
+          </div>
+
+          <!-- HIDDEN -->
+          <input type="hidden" id="hotel-id" />
+
+          <!-- 🔥 PRICE BOX -->
+          <div class="alert alert-success text-center mt-3">
+            <strong>Total Price: Rs <span id="total-price">0</span></strong>
+          </div>
+        </form>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-success px-4" id="confirm-booking-button">
+          Confirm Booking
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Payment Modal -->
+<div
+  class="modal fade"
+  id="paymentModal"
+  tabindex="-1"
+  aria-labelledby="paymentModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentModalLabel">Payment Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="payment-form">
+          <!-- Cardholder Name -->
+          <div class="mb-3">
+            <label for="cardholder-name" class="form-label"
+              >Cardholder Name</label
+            >
+            <input
+              type="text"
+              id="cardholder-name"
+              class="form-control"
+              placeholder="Enter cardholder name"
+              required
+            />
+          </div>
+          <!-- Card Number -->
+          <div class="mb-3">
+            <label for="card-number" class="form-label">Card Number</label>
+            <input
+              type="text"
+              id="card-number"
+              class="form-control"
+              placeholder="Enter card number"
+              required
+            />
+            <div
+              class="text-danger small"
+              id="card-number-error"
+              style="display: none"
+            >
+              Invalid card number. Must be Visa (starts with 4) or MasterCard
+              (starts with 5).
+            </div>
+          </div>
+          <!-- Expiration Date -->
+          <div class="mb-3">
+            <label for="expiration-date" class="form-label"
+              >Expiration Date (MM/YY)</label
+            >
+            <input
+              type="text"
+              id="expiration-date"
+              class="form-control"
+              placeholder="MM/YY"
+              required
+            />
+            <div
+              class="text-danger small"
+              id="expiration-date-error"
+              style="display: none"
+            >
+              Expiration date must be in the future.
+            </div>
+          </div>
+          <!-- CVV -->
+          <div class="mb-3">
+            <label for="cvv" class="form-label">CVV</label>
+            <input
+              type="text"
+              id="cvv"
+              class="form-control"
+              placeholder="Enter CVV"
+              required
+            />
+            <div class="text-danger small" id="cvv-error" style="display: none">
+              CVV must be exactly 3 digits.
+            </div>
+          </div>
+          <!-- Total Amount -->
+          <p>
+            <strong>Total Amount:</strong> Rs<span id="payment-total-price"
+              >0</span
+            >
+          </p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          id="confirm-payment-button"
+        >
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %} 
+{% if request.resolver_match.url_name == "home" %}
+<section id="filtered-hotels" class="hotel-list"></section>
+{% endif %} 
+{% endblock %} 
+
+{% block scripts %}
+{% if request.resolver_match.url_name == "home" %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // ================= GLOBAL =================
+  let selectedHotelPrice = 0;
+
+  const hotelsContainer = document.getElementById("filtered-hotels");
+
+  const bookNowButton = document.getElementById("book-now-button");
+  const confirmBookingBtn = document.getElementById("confirm-booking-button");
+  const confirmPaymentBtn = document.getElementById("confirm-payment-button");
+
+  const checkInDateInput = document.getElementById("check-in-date");
+  const checkOutDateInput = document.getElementById("check-out-date");
+  const numberOfRoomsInput = document.getElementById("number-of-rooms");
+
+  const totalPriceElement = document.getElementById("total-price");
+  const paymentTotalPriceElement = document.getElementById("payment-total-price");
+
+ // ================= FETCH HOTELS =================
+function fetchHotels() {
+  fetch("/get-hotels/")
+    .then(res => res.json())
+    .then(data => {
+
+      hotelsContainer.innerHTML = "";
+
+      data.hotels.forEach(hotel => {
+
+        const card = document.createElement("div");
+        card.className = "hotel card mb-3";
+
+        card.dataset.hotel = hotel.id;
+        card.dataset.price = hotel.price_per_night;
+        card.dataset.address = hotel.address;
+
+        // 🔥 GET FIRST IMAGE (IMPORTANT)
+        let imageUrl = "/static/images/placeholder.jpg";
+
+        if (hotel.images && hotel.images.length > 0) {
+          imageUrl = "/static/" + hotel.images[0];
+        }
+
+        // 🔥 ADD IMAGE TO CARD
+        card.innerHTML = `
+          <img src="${imageUrl}" 
+               class="card-img-top" 
+               style="height:200px; object-fit:cover;">
+
+          <div class="card-body">
+            <h5>${hotel.name}</h5>
+            <p>${hotel.address}</p>
+            <p><strong>Rs ${hotel.price_per_night}</strong></p>
+
+            <button class="btn btn-success view-details">
+              View Details
+            </button>
+          </div>
+        `;
+
+        hotelsContainer.appendChild(card);
+      });
+
+      attachViewDetailsListeners();
+    });
+}
+
+
+
+// ================= LOCATION FILTER =================
+document.querySelectorAll(".location-item").forEach(item => {
+
+  item.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const selectedCity = this.dataset.city.toLowerCase();
+
+    fetch("/get-hotels/")
+      .then(res => res.json())
+      .then(data => {
+
+        hotelsContainer.innerHTML = "";
+
+        // ✅ FILTER HOTELS
+        let filteredHotels = data.hotels;
+
+        if (selectedCity !== "all") {
+          filteredHotels = data.hotels.filter(
+            hotel => hotel.city.toLowerCase() === selectedCity
+          );
+        }
+
+        // ✅ SHOW FILTERED HOTELS
+        filteredHotels.forEach(hotel => {
+
+          const card = document.createElement("div");
+          card.className = "hotel card mb-3";
+
+          card.dataset.hotel = hotel.id;
+          card.dataset.price = hotel.price_per_night;
+          card.dataset.address = hotel.address;
+
+          let imageUrl = "/static/images/placeholder.jpg";
+
+          if (hotel.images && hotel.images.length > 0) {
+            imageUrl = "/static/" + hotel.images[0];
+          }
+
+          card.innerHTML = `
+            <img src="${imageUrl}" 
+                 class="card-img-top"
+                 style="height:200px; object-fit:cover;">
+
+            <div class="card-body">
+              <h5>${hotel.name}</h5>
+              <p>${hotel.address}</p>
+              <p><strong>Rs ${hotel.price_per_night}</strong></p>
+
+              <button class="btn btn-success view-details">
+                View Details
+              </button>
+            </div>
+          `;
+
+          hotelsContainer.appendChild(card);
+        });
+
+        attachViewDetailsListeners();
+      });
+  });
+
+});
+
+  // ================= VIEW DETAILS =================
+function attachViewDetailsListeners() {
+  document.querySelectorAll(".view-details").forEach(btn => {
+    btn.onclick = function () {
+
+      const card = this.closest(".hotel");
+      const hotelId = card.dataset.hotel;
+
+      fetch("/get-hotels/")
+        .then(res => res.json())
+        .then(data => {
+
+          const hotel = data.hotels.find(h => h.id == hotelId);
+
+          document.getElementById("hotel-name").textContent = hotel.name;
+          document.getElementById("hotel-price").textContent = hotel.price_per_night;
+          document.getElementById("hotel-id").value = hotel.id;
+          document.getElementById("hotel-address").textContent = hotel.address;
+
+
+          // 🔥 AMENITIES FIX
+const amenitiesContainer = document.getElementById("hotel-amenities");
+
+amenitiesContainer.innerHTML = "";
+
+if (hotel.amenities && hotel.amenities.length > 0) {
+
+  hotel.amenities.forEach(item => {
+
+    const li = document.createElement("li");
+    li.textContent = item;
+
+    amenitiesContainer.appendChild(li);
+  });
+
+} else {
+
+  amenitiesContainer.innerHTML = "<li>No amenities available</li>";
+}
+
+          // 🔥 IMAGES FIX
+          const container = document.getElementById("hotel-images");
+          container.innerHTML = "";
+
+          if (hotel.images && hotel.images.length > 0) {
+            hotel.images.forEach(img => {
+              const image = document.createElement("img");
+
+              image.src = "/static/" + img;
+              image.style.width = "120px";
+              image.style.height = "100px";
+              image.style.objectFit = "cover";
+              image.style.margin = "5px";
+              image.style.borderRadius = "6px";
+
+              container.appendChild(image);
+            });
+          } else {
+            container.innerHTML = "<p>No images available</p>";
+          }
+
+          new bootstrap.Modal(document.getElementById("hotelDetailsModal")).show();
+        });
+    };
+  });
+}
+
+
+// ================= SEARCH =================
+const searchButton = document.getElementById("search-button");
+const searchBar = document.getElementById("search-bar");
+
+function performSearch() {
+
+  const searchText = searchBar.value.toLowerCase().trim();
+
+  fetch("/get-hotels/")
+    .then(res => res.json())
+    .then(data => {
+
+      hotelsContainer.innerHTML = "";
+
+      // 🔥 ENHANCED SEARCH
+      let filteredHotels = data.hotels.filter(hotel => {
+
+        const name = hotel.name.toLowerCase();
+        const city = hotel.city.toLowerCase();
+        const address = hotel.address.toLowerCase();
+
+        // Split search into multiple words
+        const searchWords = searchText.split(" ");
+
+        return searchWords.every(word =>
+
+          name.includes(word) ||
+          city.includes(word) ||
+          address.includes(word)
+
+        );
+
+      });
+
+      // 🔥 NO RESULTS
+      if (filteredHotels.length === 0) {
+
+        hotelsContainer.innerHTML = `
+          <div class="alert alert-danger text-center">
+            No hotels found
+          </div>
+        `;
+
+        return;
+      }
+
+      // 🔥 SHOW HOTELS
+      filteredHotels.forEach(hotel => {
+
+        const card = document.createElement("div");
+        card.className = "hotel card mb-3";
+
+        card.dataset.hotel = hotel.id;
+        card.dataset.price = hotel.price_per_night;
+        card.dataset.address = hotel.address;
+
+        // 🔥 IMAGE
+        let imageUrl = "/static/images/placeholder.jpg";
+
+        if (hotel.images && hotel.images.length > 0) {
+          imageUrl = "/static/" + hotel.images[0];
+        }
+
+        card.innerHTML = `
+          <img src="${imageUrl}" 
+               class="card-img-top"
+               style="height:200px; object-fit:cover;">
+
+          <div class="card-body">
+
+            <h5>${hotel.name}</h5>
+
+            <p>${hotel.address}</p>
+
+            <p>
+              <strong>Rs ${hotel.price_per_night}</strong>
+            </p>
+
+            <button class="btn btn-success view-details">
+              View Details
+            </button>
+
+          </div>
+        `;
+
+        hotelsContainer.appendChild(card);
+
+      });
+
+      // 🔥 IMPORTANT
+      attachViewDetailsListeners();
+
+    });
+
+}
+
+// 🔥 SEARCH BUTTON
+if (searchButton) {
+
+  searchButton.addEventListener("click", function () {
+    performSearch();
+  });
+
+}
+
+// 🔥 LIVE SEARCH
+if (searchBar) {
+
+  searchBar.addEventListener("keyup", function () {
+    performSearch();
+  });
+
+}
+
+
+  // ================= PRICE CALCULATION =================
+  function calcPrice() {
+
+    selectedHotelPrice = parseFloat(
+      document.getElementById("hotel-price").textContent
+    );
+
+    const checkIn = checkInDateInput.value;
+    const checkOut = checkOutDateInput.value;
+    const rooms = parseInt(numberOfRoomsInput.value);
+
+    if (!checkIn || !checkOut) {
+      totalPriceElement.textContent = "0";
+      return;
+    }
+
+    const inDate = new Date(checkIn);
+    const outDate = new Date(checkOut);
+
+    if (outDate <= inDate) {
+      totalPriceElement.textContent = "0";
+      return;
+    }
+
+    const nights = (outDate - inDate) / (1000 * 60 * 60 * 24);
+    const total = nights * rooms * selectedHotelPrice;
+
+    console.log("💰 FINAL:", total);
+
+    totalPriceElement.textContent = total.toFixed(2);
+  }
+
+  // ================= EVENTS =================
+  if (checkInDateInput) checkInDateInput.addEventListener("change", calcPrice);
+  if (checkOutDateInput) checkOutDateInput.addEventListener("change", calcPrice);
+  if (numberOfRoomsInput) numberOfRoomsInput.addEventListener("change", calcPrice);
+
+  // ================= BOOK NOW =================
+  if (bookNowButton) {
+    bookNowButton.onclick = () => {
+      console.log("🟢 Book Now Clicked");
+
+      selectedHotelPrice = parseFloat(
+        document.getElementById("hotel-price").textContent
+      );
+
+      totalPriceElement.textContent = "0";
+
+      const hotelModal = bootstrap.Modal.getInstance(
+        document.getElementById("hotelDetailsModal")
+      );
+      if (hotelModal) hotelModal.hide();
+
+      new bootstrap.Modal(
+        document.getElementById("bookingModal")
+      ).show();
+
+      // 🔥 FIX: ensure calculation runs
+      setTimeout(() => {
+        calcPrice();
+      }, 200);
+    };
+  }
+
+  // ================= CONFIRM BOOKING =================
+  if (confirmBookingBtn) {
+    confirmBookingBtn.onclick = () => {
+
+      if (totalPriceElement.textContent === "0") {
+        alert("Select valid dates first");
+        return;
+      }
+
+      paymentTotalPriceElement.textContent = totalPriceElement.textContent;
+
+      bootstrap.Modal.getInstance(document.getElementById("bookingModal")).hide();
+
+      new bootstrap.Modal(document.getElementById("paymentModal")).show();
+    };
+  }
+
+  // ================= PAYMENT =================
+  if (confirmPaymentBtn) {
+    confirmPaymentBtn.onclick = () => {
+
+      const data = {
+        customer_name: document.getElementById("customer-name").value,
+        email: document.getElementById("customer-email").value,
+        phone_number: document.getElementById("customer-phone").value,
+        check_in_date: checkInDateInput.value,
+        check_out_date: checkOutDateInput.value,
+        number_of_rooms: parseInt(numberOfRoomsInput.value),
+        total_price: totalPriceElement.textContent,
+        hotel_id: document.getElementById("hotel-id").value,
+        card_number: document.getElementById("card-number").value
+      };
+
+      fetch("/save-booking/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.success) {
+          alert("✅ Booking Successful!");
+          window.location.href = "/success/";
+        } else {
+          alert("❌ " + response.error);
+        }
+      })
+      .catch(() => alert("Server error"));
+    };
+  }
+
+  // ================= LOAD =================
+  fetchHotels();
+
+});
+</script>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+
+  <h3 class="mb-4">📋 My Bookings</h3>
+
+  {% if bookings %}
+  <table class="table table-hover shadow-sm">
+
+    <thead class="table-success">
+      <tr>
+        <th>Hotel</th>
+        <th>Dates</th>
+        <th>Rooms</th>
+        <th>Total</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for b in bookings %}
+      <tr>
+        <td>{{ b.hotel.name }}</td>
+
+        <td>
+          {{ b.check_in_date }} <br>
+          <small>to {{ b.check_out_date }}</small>
+        </td>
+
+        <td>{{ b.number_of_rooms }}</td>
+        <td>Rs {{ b.total_price }}</td>
+
+        <td>
+          {% if b.status == "pending" %}
+            <span class="badge bg-warning text-dark">Pending</span>
+
+          {% elif b.status == "approved" %}
+            <span class="badge bg-success">Approved</span>
+
+          {% elif b.status == "rejected" %}
+            <span class="badge bg-danger">Rejected</span>
+          {% endif %}
+        </td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+
+  {% else %}
+    <div class="alert alert-info">No bookings found.</div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
